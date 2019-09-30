@@ -1,15 +1,19 @@
 var alunoController = new AlunoController;
 var cursoController = new CursoController;
 
-function main(){
-    menu();
+class Usuario{
+    constructor(login, senha)
+    {
+        this.login = login,
+        this.senha = senha;
+    }
 }
 
+var users = [new Usuario("admin", "admin"), new Usuario("tester", "tester123")];
+
 function menu(){
-    while(true)
-    {
-    var optionMenu = Number(prompt("Digite a opção desejada: \n 1 - Curso\n 2 - Aluno\n 3 - Lançar Nota\n 4 - Relatório de Notas\n 9 - Sair"));
     do{
+        var optionMenu = Number(prompt("Digite a opção desejada: \n 1 - Curso\n 2 - Aluno\n 3 - Lançar Nota\n 4 - Relatório de Notas\n 9 - Sair"));
         switch(optionMenu)
         {
             case 1:
@@ -21,11 +25,11 @@ function menu(){
                             {
                                 var codigo = parseInt(prompt("Digite o codigo do curso (apenas numeros): "));
                             }while(isNaN(codigo));
-                            var nome = prompt("Digite o nome do curos: ");
+                            var nome = prompt("Digite o nome do curso: ");
                             do
                             {
                             var media = parseInt(prompt("Digite a media de aprovação do curso (apenas numeros): "));
-                            }while(isNaN(media) || media<0 || media>100);
+                            }while(isNaN(media) && media<0 && media>100);
                             var curso = new Curso(codigo, nome, media);
 
                             if(cursoController.inserir(curso))
@@ -59,7 +63,7 @@ function menu(){
                                 var lista = "Nome  - Código - Média de aprovação - Número de alunos\n"; 
                                 for(var i = 0; i<cursoController.cursos.length; i++)
                                 {
-                                    lista += cursoController.cursos[i].nome + " - " + cursoController.cursos[i].codigo + " - " + cursoController.cursos[i].mediaAprovacao + " - " + cursoController.cursos[i].alunos;
+                                    lista += cursoController.cursos[i].nome + " - " + cursoController.cursos[i].codigo + " - " + cursoController.cursos[i].mediaAprovacao + " - " + cursoController.cursos[i].alunos +"\n";
                                 }
                                 alert(lista);
                             }
@@ -70,7 +74,7 @@ function menu(){
                             optMenuCurso = 9;
                             break;
                         case 9:
-                            optionMenu = 9;
+                            optionMenu = 8;
                             break;
                         default:
                             alert("Selecione apenas opções válidas!");
@@ -120,7 +124,7 @@ function menu(){
                             }
                             else
                             {
-                                alert("um aluno com esse código já foi cadastrado");
+                                alert("o aluno não pode ser cadastrado");
                             }
                             optMenuAluno = 9;
                             break;
@@ -166,7 +170,7 @@ function menu(){
                             optMenuAluno = 9;
                             break;
                         case 9:
-                            optionMenu = 9;
+                            optionMenu = 8;
                             break;
                         default:
                             alert("Selecione apenas opções válidas!");
@@ -180,7 +184,6 @@ function menu(){
                 {
                     var codigo = parseInt(prompt("Digite o código do aluno (apenas numeros): "));
                 }while(isNaN(codigo));
-                console.log(alunoController.alunos.find(aux => aux.codigo == codigo));
                 if(alunoController.alterar(alunoController.alunos.find(aux => aux.codigo == codigo)))
                 {
                     alert("aluno alterado com sucesso!");
@@ -189,19 +192,48 @@ function menu(){
                 {
                     alert("o código do aluno não consta no banco de dados");
                 }
-                optionMenu = 9;
+                optionMenu = 8;
                 break;
             case 4:
-                var relatNota = Number(prompt(""));
+                 if(alunoController.alunos.length>0)
+                {
+                    var lista = "Nome  - Código - Curso - Cidade - Estado - Situação\n"; 
+                    for(var i = 0; i<alunoController.alunos.length; i++)
+                    {
+                        lista += alunoController.alunos[i].nome + " - " + alunoController.alunos[i].codigo + " - " + alunoController.alunos[i].curso.nome + " - " + alunoController.alunos[i].cidade + " - " + alunoController.alunos[i].estado + " - " + alunoController.estado(alunoController.alunos[i]) +"\n";
+                    }
+                    alert(lista);
+                }
+                else
+                {
+                    alert("Não há alunos cadastrados!");
+                }
+                optionMenu = 8;
+                break;
+            case 8:
                 break;
             case 9:
+                optionMenu = 9;
                 break;
             default:
                 alert("Selecione apenas opções válidas!");
-                optionMenu = 9;
                 break;
         }
     } while(optionMenu!=9);
+}
+
+function main(){
+    console.log(users);
+    var usuario = prompt("digite o nome de usuario:");
+    var senha = prompt("digite a senha:");
+    usuario = users.find(aux => aux.login == usuario);
+    if(usuario != undefined && usuario.senha==senha)
+    {
+        menu();
+    }
+    else
+    {
+        alert("usuario ou senha invalidos");
     }
 }
 

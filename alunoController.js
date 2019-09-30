@@ -7,7 +7,7 @@ class AlunoController{
     inserir(aluno)
     {
 
-        if(this.alunos.find(aux => aux.codigo == aluno.codigo))
+        if(this.alunos.find(aux => aux.codigo == aluno.codigo) && aluno.curso.alunos<=50)
         {
             return false;
         }
@@ -42,7 +42,7 @@ class AlunoController{
             var faltas; 
             do{
                 faltas = parseInt(prompt("Digite as faltas: "));
-            }while(isNaN(faltas) || faltas<0 || faltas>100);
+            }while(isNaN(faltas) && faltas<0 && faltas>100);
             var notas = [];
             var nota;
             for(var i = 1; i<5; i++)
@@ -53,7 +53,7 @@ class AlunoController{
                 notas.push(nota);
             }
             aluno.notas = notas;
-            aluno.faltas = faltas;
+            aluno.falta = faltas;
             return true;
         }
         else
@@ -66,13 +66,20 @@ class AlunoController{
     {
         if(this.alunos.find(aux => aux.codigo == aluno.codigo))
         {
-            if(aluno.falta<20 && aluno.notas[0]>aluno.curso.mediaAprovacao && aluno.notas[0]>aluno.curso.mediaAprovacao)
+            if(aluno.falta<20 && aluno.notas[0]>=aluno.curso.mediaAprovacao && aluno.notas[1]>=aluno.curso.mediaAprovacao && aluno.notas[2]>=aluno.curso.mediaAprovacao && aluno.notas[3]>=aluno.curso.mediaAprovacao)
             {
                 return "aprovado";
             }
             else
             {
-                return "reprovado";
+                if(aluno.falta == undefined)
+                {
+                    return "Sem dados para anlisar";
+                }
+                else
+                {
+                    return "reprovado";
+                }
             }
         }
     }

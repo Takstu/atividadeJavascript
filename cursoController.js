@@ -14,7 +14,6 @@ class CursoController{
         else
         {
             this.cursos.push(curso);
-            console.log(this.cursos);
             return true;
         }
  
@@ -28,7 +27,6 @@ class CursoController{
                 if(indice != -1 && aux.alunos==0)
                 {
                     this.cursos.splice(indice, 1);
-                    console.log(this.cursos);
                     return true;
                 }
             }
